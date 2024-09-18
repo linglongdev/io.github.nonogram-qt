@@ -1,0 +1,29 @@
+version: "1"
+
+package:
+  id: io.github.nonogram-qt
+  name: nonogram-qt
+  version: 1.0.0.0
+  kind: app
+  description: |
+    A nonogram puzzle game
+
+command:
+  - /opt/apps/io.github.nonogram-qt/files/bin/nonogram-qt
+
+base: org.deepin.foundation/23.0.0
+runtime: org.deepin.Runtime/23.0.1
+
+sources:
+  - kind: git
+    url: https://github.com/dsuni/nonogram-qt.git
+    version: master
+    commit: f4a22b3c20528877c36cccd1093a5a627f2a7db5
+
+build: |
+  cd /project/linglong/sources/nonogram-qt.git
+  git apply ../../../0001-install.patch
+  cp icon.png nonogram-qt.png
+  qmake -makefile PREFIX=${PREFIX} LIB_INSTALL_DIR=${PREFIX}/lib/${TRIPLET}
+  make -j$(nproc)
+  make install
